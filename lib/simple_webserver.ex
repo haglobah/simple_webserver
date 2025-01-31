@@ -39,9 +39,9 @@ defmodule SimpleWebServer do
         "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: #{content_length}\r\n\r\n#{body}"
 
       path == "/hello" ->
-        body = "Hello, World!"
+        body = "<h1>Hello, World!</h1>"
         content_length = byte_size(body)
-        "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: #{content_length}\r\n\r\n#{body}"
+        "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: #{content_length}\r\n\r\n#{body}"
 
       path == "/goodbye" ->
         body = "Goodbye!!!"
