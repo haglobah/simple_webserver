@@ -1,5 +1,10 @@
-defmodule SimpleWebServer do
-  def start(port) do
+defmodule SimpleWebserver do
+  @moduledoc """
+  A simple web server leveraging :gen_tcp that tries to hide as little as possible.
+
+  Run via `iex -S mix`, and then `SimpleWebServer.start(<port>)`
+  """
+  def start(port \\ 8080) do
     {:ok, socket} =
       :gen_tcp.listen(port, [:binary, packet: :raw, active: false, reuseaddr: true])
 
@@ -30,7 +35,7 @@ defmodule SimpleWebServer do
     |> Enum.at(1)
   end
 
-  defp generate_response(path) do
+  def generate_response(path) do
     cond do
       String.starts_with?(path, "/hello/") ->
         name = String.trim_leading(path, "/hello/")
