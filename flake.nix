@@ -30,9 +30,10 @@
               # { name = "MY_ENV_VAR"; value = "SOTRUE"; }
           ];
           packages = [
-            pkgs.beam.packages.erlang_26.elixir_1_16
+            pkgs.elixir_1_18 
             pkgs.gnumake
             pkgs.gcc
+            pkgs.elixir-ls
           ];
           commands = [
             { name = "ie"; command = "iex -S mix"; help = "Run iex with the application loaded";}
