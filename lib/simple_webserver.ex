@@ -19,11 +19,16 @@ defmodule SimpleWebserver do
   end
 
   defp handle_client(client) do
-    {:ok, request} = :gen_tcp.recv(client, 0)
-    path = parse_path(request)
-    response = generate_response(path)
-    :gen_tcp.send(client, response)
-    :gen_tcp.close(client)
+    case :gen_tcp.recv(client, 0) do
+      {:ok, request} ->
+        path = parse_path(request)
+        response = generate_response(path)
+        :gen_tcp.send(client, response)
+        :gen_tcp.close(client)
+
+      {:error, _msg} ->
+        IO.puts("Oh no!")
+    end
   end
 
   defp parse_path(request) do
@@ -41,21 +46,25 @@ defmodule SimpleWebserver do
         name = String.trim_leading(path, "/hello/")
         body = "Hello, #{name}!"
         content_length = byte_size(body)
+
         "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: #{content_length}\r\n\r\n#{body}"
 
       path == "/hello" ->
         body = "<h1>Hello, World!</h1>"
         content_length = byte_size(body)
+
         "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: #{content_length}\r\n\r\n#{body}"
 
       path == "/goodbye" ->
         body = "Goodbye!!!"
         content_length = byte_size(body)
+
         "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: #{content_length}\r\n\r\n#{body}"
 
       true ->
         body = "Not Found"
         content_length = byte_size(body)
+
         "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\nContent-Length: #{content_length}\r\n\r\n#{body}"
     end
   end
