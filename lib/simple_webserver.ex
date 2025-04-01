@@ -21,8 +21,10 @@ defmodule SimpleWebserver do
   defp handle_client(client) do
     case :gen_tcp.recv(client, 0) do
       {:ok, request} ->
+
         path = parse_path(request)
         response = generate_response(path)
+
         :gen_tcp.send(client, response)
         :gen_tcp.close(client)
 
