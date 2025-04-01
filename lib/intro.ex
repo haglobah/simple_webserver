@@ -7,5 +7,3 @@ defmodule Intro do
     a * 2
   end
 end
-
-IO.puts("hello")
