@@ -187,7 +187,7 @@ Content-Length: #{laenge}
         :gen_tcp.close(client)
 
       {:error, _msg} ->
-        IO.puts("Oh, da hat etwas nicht geklappt!")
+        IO.puts("Something went wrong!")
     end
   end
 end
