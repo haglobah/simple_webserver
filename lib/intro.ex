@@ -7,27 +7,29 @@ defmodule Intro do
       2 * 8
 
       "Hallo"
-      "Hallo" <> " zum " <> "Girls' Day!"
+      "Hallo" <> " zu " <> "den TDF!"
 
-      String.split("Hallo zum Girls Day!")
-      "Hallo zum Girls' Day" |> String.split()
+      String.split("Hallo zu den TDF!")
+      "Hallo zu den TDF!" |> String.split()
 
       "Hallo" == "Hallo"
       "Hallo" == "Hallö"
 
-      die_nachricht = "Hallo, ich bin Beat"
+      the_message = "Hallo, ich bin Beat"
+      other_message = "Hallö, ich bin Beat"
 
-      String.starts_with?(die_nachricht, "Hallo,")
+      String.starts_with?(the_message, "Hallo,")
 
-      case String.starts_with?(die_nachricht, "Hallo") do
+      case String.starts_with?(the_message, "Hallo") do
         true -> "Stimmt!"
         false -> "Stimmt nicht. :("
       end
 
-      Intro.startet_mit_hallo(die_nachricht)
+      Intro.starts_with_hello(the_message)
+      Intro.starts_with_hello(die_andere_nachricht)
   """
 
-  def startet_mit_hallo(nachricht) do
+  def starts_with_hello(nachricht) do
     case String.starts_with?(nachricht, "Hallo") do
         true -> "Stimmt!"
         false -> "Stimmt nicht. :("
@@ -36,24 +38,42 @@ defmodule Intro do
 
   @doc """
   iex>
-  anfrage = "GET / localhost:8080"
+  request = "GET / localhost:8080"
 
-  Intro.antwort_v1(anfrage)
+  Intro.response_v1(request)
   """
-  def antwort_v1(_anfrage) do
-    "Hallo zum Girls' Day!"
+  def response_v1(_request) do
+    "Hallo, Web!"
+  end
+
+  def response_v2a(_request) do
+    "HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 30
+
+<p style=\"color: red;\">Hallo zu den TDF!</p>"
+  end
+
+  def response_v2b(_request) do
+    inhalt = "<p style=\"color: red;\">Hallo zu den TDF!</p>"
+    laenge = byte_size(inhalt)
+    "HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: #{laenge}
+
+#{inhalt}"
   end
 
   @doc """
   So, dass es der Browser verstehen kann.
 
   iex>
-  anfrage = "GET / localhost:8080"
+  request = "GET / localhost:8080"
 
-  Intro.antwort_v2(anfrage)
+  Intro.response_v2(request)
   """
-  def antwort_v2(_anfrage) do
-    body = "Hallo zum Girls' Day!"
+  def response_v2(_request) do
+    body = "Hallo zu den TDF!"
     content_length = byte_size(body)
 
     "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: #{content_length}\r\n\r\n#{body}"
@@ -63,37 +83,36 @@ defmodule Intro do
   So, dass es der Browser es als HTML verstehen kann.
 
   iex>
-  anfrage = "GET / localhost:8080"
+  request = "GET / localhost:8080"
 
-  Intro.antwort_v3(anfrage)
+  Intro.response_v3(request)
   """
-  def antwort_v3(_anfrage) do
-    body = "<h1>Hallo zum Girls' Day!</h1>"
+  def response_v3(_request) do
+    body = "<h1>Hallo zu den TDF!</h1>"
     content_length = byte_size(body)
 
     "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: #{content_length}\r\n\r\n#{body}"
   end
 
   @doc """
-  So, dass es der Browser es als HTML verstehen kann.
 
   iex>
-  anfrage = "GET / localhost:8080"
+  request = "GET / localhost:8080"
 
-  anfrage
+  request
   |> String.split()
   |> Enum.at(1)
 
-  Intro.antwort_v4(anfrage)
+  Intro.response_v4(request)
   """
-  def antwort_v4(anfrage) do
-    path = anfrage
+  def response_v4(request) do
+    path = request
       |> String.split()
       |> Enum.at(1)
 
     case path do
       "/" ->
-        body = "<h1>Hallo zum Girls' Day!</h1>"
+        body = "<h1>Hallo zu den TDF!</h1>"
         content_length = byte_size(body)
 
         "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: #{content_length}\r\n\r\n#{body}"
@@ -110,36 +129,36 @@ defmodule Intro do
     end
   end
 
-  def baue_antwort(body) do
+  def build_response(body) do
     content_length = byte_size(body)
 
     "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: #{content_length}\r\n\r\n#{body}"
   end
 
-  def antwort_v5(anfrage) do
-    path = anfrage
+  def response_v5(request) do
+    path = request
       |> String.split()
       |> Enum.at(1)
 
     case path do
-      "/" -> baue_antwort("<h1>Hallo zum Girls' Day!</h1>")
-      "/du" -> baue_antwort("<h1>Hallo, du!</h1>")
-      "/ich" -> baue_antwort("<h1>Hallo an mich!</h1>")
+      "/" -> build_response("<h1>Hallo zu den TDF!</h1>")
+      "/du" -> build_response("<h1>Hallo, du!</h1>")
+      "/ich" -> build_response("<h1>Hallo an mich!</h1>")
     end
   end
 
-  def antwort_v6(anfrage) do
-    path = anfrage
+  def response_v6(request) do
+    path = request
       |> String.split()
       |> Enum.at(1)
 
     cond do
-      path == "/" -> baue_antwort("<h1>Hallo zum Girls' Day!</h1>")
-      path == "/du" -> baue_antwort("<h1>Hallo, du!</h1>")
-      path == "/ich" -> baue_antwort("<h1>Hallo an mich!</h1>")
+      path == "/" -> build_response("<h1>Hallo zu den TDF!</h1>")
+      path == "/du" -> build_response("<h1>Hallo, du!</h1>")
+      path == "/ich" -> build_response("<h1>Hallo an mich!</h1>")
       true ->
         name = String.trim_leading(path, "/")
-        baue_antwort("<h1>Hallo, #{name}</h1>")
+        build_response("<h1>Hallo, #{name}</h1>")
     end
   end
 
@@ -148,7 +167,7 @@ defmodule Intro do
     {:ok, socket} =
       :gen_tcp.listen(port, [:binary, packet: :raw, active: false, reuseaddr: true])
 
-    IO.puts("Webserver läuft auf localhost:#{port}...")
+    IO.puts("Web Server runs at localhost:#{port}...")
     accept(socket)
   end
 
@@ -160,11 +179,11 @@ defmodule Intro do
 
   defp handle_client(client) do
     case :gen_tcp.recv(client, 0) do
-      {:ok, anfrage} ->
+      {:ok, request} ->
 
-        die_antwort = antwort_v1(anfrage)
+        response = response_v6(request)
 
-        :gen_tcp.send(client, die_antwort)
+        :gen_tcp.send(client, response)
         :gen_tcp.close(client)
 
       {:error, _msg} ->
@@ -172,3 +191,4 @@ defmodule Intro do
     end
   end
 end
+

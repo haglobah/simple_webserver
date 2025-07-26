@@ -30,7 +30,7 @@
               # { name = "MY_ENV_VAR"; value = "SOTRUE"; }
           ];
           packages = [
-            pkgs.elixir_1_18 
+            pkgs.elixir_1_18
             pkgs.gnumake
             pkgs.gcc
             pkgs.elixir-ls
