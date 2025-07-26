@@ -46,31 +46,32 @@ defmodule Intro do
     "Hallo, Web!"
   end
 
+  @doc """
+  Make it browser-readable.
+  """
   def response_v2a(_request) do
     "HTTP/1.1 200 OK
-Content-Type: text/html
-Content-Length: 30
+Content-Type: text/plain
+Content-Length: 2
 
-<p style=\"color: red;\">Hallo zu den TDF!</p>"
-  end
-
-  def response_v2b(_request) do
-    inhalt = "<p style=\"color: red;\">Hallo zu den TDF!</p>"
-    laenge = byte_size(inhalt)
-    "HTTP/1.1 200 OK
-Content-Type: text/html
-Content-Length: #{laenge}
-
-#{inhalt}"
+ok"
   end
 
   @doc """
-  So, dass es der Browser verstehen kann.
+  Clean up
+  """
+  def response_v2b(_request) do
+    body = "ok"
+    content_length = byte_size(body)
+    "HTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Length: #{content_length}
 
-  iex>
-  request = "GET / localhost:8080"
+#{body}"
+  end
 
-  Intro.response_v2(request)
+  @doc """
+  Obey the actual spec
   """
   def response_v2(_request) do
     body = "Hallo zu den TDF!"
@@ -80,12 +81,7 @@ Content-Length: #{laenge}
   end
 
   @doc """
-  So, dass es der Browser es als HTML verstehen kann.
-
-  iex>
-  request = "GET / localhost:8080"
-
-  Intro.response_v3(request)
+  Switch content-type to `text/html`
   """
   def response_v3(_request) do
     body = "<h1>Hallo zu den TDF!</h1>"
@@ -95,15 +91,7 @@ Content-Length: #{laenge}
   end
 
   @doc """
-
-  iex>
-  request = "GET / localhost:8080"
-
-  request
-  |> String.split()
-  |> Enum.at(1)
-
-  Intro.response_v4(request)
+  Do actual server stuff: paths
   """
   def response_v4(request) do
     path = request
@@ -175,7 +163,7 @@ Content-Length: #{laenge}
     {:ok, client} = :gen_tcp.accept(socket)
     spawn(fn -> handle_client(client) end)
     accept(socket)
-   end
+  end
 
   defp handle_client(client) do
     case :gen_tcp.recv(client, 0) do
@@ -191,4 +179,3 @@ Content-Length: #{laenge}
     end
   end
 end
-
